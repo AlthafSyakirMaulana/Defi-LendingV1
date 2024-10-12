@@ -4,14 +4,17 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "./library/InterestRate.sol";
 
-contract SimpleLendingProtocol is ReentrancyGuard, Pausable {
+contract SimpleLendingProtocol is ReentrancyGuard, Pausable, Ownable {
+    using InterestRate for uint256;
+
     mapping(address => uint256) public deposits;
     mapping(address => uint256) public borrows;
     mapping(address => uint256) public lastBorrowTime;
 
     IERC20 public immutable token;
-    uint256 public constant INTEREST_RATE = 5; // 5% per year
     uint256 public constant COLLATERAL_FACTOR = 75; // 75% collateral factor
     uint256 public constant LIQUIDATION_THRESHOLD = 50; // 50% threshold for liquidation
 
@@ -49,7 +52,7 @@ contract SimpleLendingProtocol is ReentrancyGuard, Pausable {
         require(_amount > 0, "Amount must be greater than 0");
         
         uint256 userDeposit = deposits[msg.sender]; 
-        uint256 maxBorrow = deposits[msg.sender] * COLLATERAL_FACTOR / 100;
+        uint256 maxBorrow = userDeposit * COLLATERAL_FACTOR / 100;
         require(borrows[msg.sender] + _amount <= maxBorrow, "Exceeds allowed borrow amount");
 
         borrows[msg.sender] += _amount;
@@ -71,7 +74,7 @@ contract SimpleLendingProtocol is ReentrancyGuard, Pausable {
     function updateInterest(address _user) internal {
         if (borrows[_user] > 0) {
             uint256 timeDiff = block.timestamp - lastBorrowTime[_user];
-            uint256 interest = borrows[_user] * INTEREST_RATE / 100 * timeDiff / 365 days;
+            uint256 interest = borrows[_user] * InterestRate.BASE_RATE / 100 * timeDiff / 365 days;
             borrows[_user] += interest;
             lastBorrowTime[_user] = block.timestamp;
         }
@@ -80,7 +83,7 @@ contract SimpleLendingProtocol is ReentrancyGuard, Pausable {
     function calculateInterest(address _user) public view returns (uint256) {
         if (borrows[_user] > 0) {
             uint256 timeDiff = block.timestamp - lastBorrowTime[_user];
-            return borrows[_user] * INTEREST_RATE / 100 * timeDiff / 365 days;
+            return borrows[_user] * InterestRate.BASE_RATE / 100 * timeDiff / 365 days;
         } else {
             return 0;
         }
