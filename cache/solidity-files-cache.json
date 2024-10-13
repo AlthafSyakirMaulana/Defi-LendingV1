@@ -185,8 +185,8 @@
       ]
     },
     "/Users/althafsm/P_project_web3/SmartContract_Dev/DeFi/Defi-LendingV1/contracts/SimpleLendingProtocol.sol": {
-      "lastModificationDate": 1728742749122,
-      "contentHash": "302e83e4a8d5d25b765c3f01849e3934",
+      "lastModificationDate": 1728824366942,
+      "contentHash": "a13cb269f5949b1e370a5cd877642148",
       "sourceName": "contracts/SimpleLendingProtocol.sol",
       "solcConfig": {
         "version": "0.8.19",

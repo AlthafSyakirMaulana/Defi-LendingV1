@@ -105,6 +105,10 @@ contract SimpleLendingProtocol is ReentrancyGuard, Pausable, Ownable {
         emit Liquidate(_user, liquidationAmount);
     }
 
+    function getDepositBalance(address account) public view returns (uint256) {
+        return deposits[account];
+    }
+
     function pause() external onlyOwner {
         _pause();
     }
