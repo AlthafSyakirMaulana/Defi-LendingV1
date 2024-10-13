@@ -46,6 +46,6 @@ describe("SimpleLendingProtocol", function () {
 
     // Check the balance after withdrawal
     const balance = await lendingProtocol.getDepositBalance(owner.address);
-    expect(balance.eq(ethers.utils.parseEther("500"))).to.be.true; // Gunakan eq untuk perbandingan BigNumber
+    expect(balance.eq(ethers.utils.parseEther("500"))).to.be.true; // Use eq for BigNumber comparison
   });
 });
