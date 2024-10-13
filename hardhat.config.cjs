@@ -1,32 +1,15 @@
 require("@nomiclabs/hardhat-ethers");
-require("@nomiclabs/hardhat-waffle");
 require("dotenv").config();
 
-const INFURA_API_KEY = process.env.INFURA_API_KEY;
-const SEPOLIA_PRIVATE_KEY = process.env.SEPOLIA_PRIVATE_KEY;
-
-/** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   solidity: "0.8.19",
   networks: {
-    hardhat: {
-      // Configuration for local Hardhat network
-    },
     sepolia: {
-      url: `https://sepolia.infura.io/v3/${INFURA_API_KEY}`,
-      accounts: [SEPOLIA_PRIVATE_KEY]
-    }
-  },
-  paths: {
-    sources: "./contracts",
-    tests: "./test",
-    cache: "./cache",
-    artifacts: "./artifacts"
-  },
-  mocha: {
-    timeout: 40000
+      url: `https://sepolia.infura.io/v3/${process.env.INFURA_API_KEY}`, // Menggunakan INFURA API dari .env
+      accounts: [`0x${process.env.SEPOLIA_PRIVATE_KEY}`] // Menggunakan Sepolia Private Key dari .env
+    },
   },
   etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY
+    apiKey: process.env.ETHERSCAN_API_KEY // Untuk verifikasi kontrak jika diperlukan
   }
 };
