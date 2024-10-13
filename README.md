@@ -1,10 +1,13 @@
+### README.md 
+
+```markdown
 # DeFi-LendingV1
 
 ## Overview
 DeFi-LendingV1 is a decentralized finance (DeFi) lending protocol that allows users to deposit, borrow, and repay ERC-20 tokens in a permissionless and decentralized way. The project aims to provide users with a transparent and secure platform for lending and borrowing assets, with features like collateral management, interest rate calculation, and liquidation.
 
 ## Features
-- **Deposit & Withdraw**: Users can deposit ERC-20 tokens to earn interest, and withdraw their funds at any time.
+- **Deposit & Withdraw**: Users can deposit ERC-20 tokens to earn interest and withdraw their funds at any time.
 - **Borrow & Repay**: Users can borrow tokens by providing collateral and repay the borrowed amount with interest.
 - **Collateral Factor**: Borrowing is limited to a percentage of the collateral value (e.g., 75%).
 - **Interest Rates**: Interest rates are calculated based on the utilization rate of the protocol.
@@ -41,24 +44,33 @@ npx hardhat test
 ```
 
 ### Deployment
-To deploy the contracts to a local network:
+#### 1. Deploy ERC-20 Token
+To deploy the ERC-20 token contract:
 ```sh
-npx hardhat run scripts/deploy.js --network localhost
+npx hardhat run scripts/deployToken.js --network <network>
 ```
-To deploy to Sepolia testnet, ensure that you have the appropriate API keys set up in your `.env` file:
+Replace `<network>` with your desired network (e.g., `localhost` or `sepolia`).
+
+#### 2. Deploy Simple Lending Protocol
+After deploying the token, update `deployLendingProtocol.js` with the token address, then deploy the Simple Lending Protocol:
 ```sh
-npx hardhat run scripts/deploy.js --network sepolia
+npx hardhat run scripts/deployLendingProtocol.js --network <network>
 ```
 
 ## Project Structure
 - **contracts/**: Contains all the smart contracts.
+  - **MyToken.sol**: ERC-20 token contract.
+  - **SimpleLendingProtocol.sol**: The main lending protocol contract.
 - **scripts/**: Deployment scripts.
+  - **deployToken.js**: Script to deploy ERC-20 token.
+  - **deployLendingProtocol.js**: Script to deploy the lending protocol.
 - **test/**: Test files for the contracts.
 
 ## Configuration
 Make sure to create a `.env` file in the root directory and add the following:
 ```
 INFURA_API_KEY=<Your Infura API Key>
+SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/<Your Infura API Key>
 SEPOLIA_PRIVATE_KEY=<Your Sepolia Private Key>
 ETHERSCAN_API_KEY=<Your Etherscan API Key>
 ```
@@ -71,3 +83,4 @@ ETHERSCAN_API_KEY=<Your Etherscan API Key>
 
 ## License
 This project is licensed under the MIT License.
+```
